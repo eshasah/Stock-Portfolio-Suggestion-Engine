@@ -20,59 +20,53 @@ export class Stats extends Component {
 
     componentDidMount() {
 
-        // const data = this.props.strategies
-        // const prop = ["ethical"]
         const strategies = this.props.location.state.strategies
         const amount = this.props.location.state.amount
 
 
-        if (strategies.length === 1) {
-            const data = {
+            const data = JSON.stringify({
                 "amount": amount,
-                "strategy_1": strategies[0]
-            }
+                "strategies": strategies
+            });
+            
+            console.log(data);
 
-            axios.post('http://localhost:5000/suggest', data)
-                .then(response => {
-                    if (response.status === 200) {
-                        this.setState({
-                            companies: response.data.stock_info
-                        })
-                    }
-                })
-                .catch(err => {
-                    console.log("error")
+            fetch("http://localhost:5000/stocks", {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: data
+            })
+            .then(async response => {
+                const result = await response.json();
+                if (response.ok) {
+                    console.log(result);
                     this.setState({
-                        error: "couldn't fetch data"
+                        companies: result
                     })
+                    console.log(response.data);
+                    console.log(this.state.companies);
+                }
+            })
+            .catch(err => {
+                console.log("error")
+                this.setState({
+                    error: "couldn't fetch data"
                 })
-        } else if (strategies.length === 2) {
-            const data = {
-                "amount": amount,
-                "strategy_1": strategies[0],
-                "strategy_2": strategies[1]
-            }
+            })
 
-
-            axios.post('http://localhost:5000/suggest2', data)
-                .then(response => {
-                    if (response.status === 200) {
-                        this.setState({
-                            companies: response.data.stock_info
-                        })
-                    }
-                })
-                .catch(err => {
-                    console.log("error")
-                    this.setState({
-                        error: "couldn't fetch data"
-                    })
-                })
-        }
     }
 
     render() {
-        let companies = this.state.companies
+
+        let companies = [];
+        companies = this.state.companies
+
+        Object.keys(companies).map((index, details) => {
+            console.log(index + " " + details)
+        });
+
         let tabs = null
         let skeleton = null
         let error = null
@@ -127,8 +121,9 @@ export class Stats extends Component {
                     </thead>
                     
                     <tbody>
+                        <tr><td>here</td></tr>
 
-                        {companies.map((company, index) => {
+                        {/* {companies.map((company, index) => {
 
                             return <tr key={index}>
                                 <td>{index + 1}</td>
@@ -139,7 +134,7 @@ export class Stats extends Component {
                                 <td>${company.investAmount.toFixed(4)}</td>
                             </tr>
                         })
-                        }
+                        } */}
                     </tbody>
                 </Table>
                 {error}

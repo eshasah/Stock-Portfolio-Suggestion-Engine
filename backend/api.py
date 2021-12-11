@@ -1,157 +1,157 @@
-from flask import Flask, request, redirect, url_for, jsonify, send_file
-import requests
+from flask import Flask, render_template, request
+# import pandas as pd
+# import numpy as np
+import yfinance as yf
+from datetime import datetime as dt
 import json
-import random
-from flask_cors import CORS
 
-# import sys
-# reload(sys)
-# sys.setdefaultencoding('utf8')
 
-app = Flask(__name__, static_url_path='/static')
-CORS(app)
+# Configure the app
+app = Flask(__name__)
 
-@app.route('/')
-def hello():
-    return "Welcome to Stock Portfolio Suggestion Engine"
-
-stock_options = {
-        'ethical': ['AAPL', 'ADBE', 'SBUX', 'GILD', 'GOOGL'],
-        'growth': ['BIIB', 'AKRX', 'IPGP', 'SFIX', 'NFLX'],
-        'index': ['VTI', 'IXUS', 'ILTB', 'VIS', 'KRE', 'VEU'],
-        'quality': ['QUAL', 'SPHQ', 'DGRW', 'QDF'],
-        'value': ['AAON', 'CTB', 'JNJ', 'GRUB', 'TTGT']
+investment_strategies = {
+    "ETHICAL": ["AAPL", "NSRGY", "ADBE"],
+    "GROWTH": ["FB", "NFLX", "GOOG"],
+    "INDEX": ["VOO", "SPY", "QQQ"],
+    "QUALITY": ["MDLZ", "CVS", "ED"],
+    "VALUE": ["BAC", "KHC", "VZ"]
 }
 
-@app.route('/suggest',methods=['POST'])
-def suggest_stocks():
-    print ("suggest")
-    req_data = request.get_json()
-    strategy_1 = req_data['strategy_1']
-    amount = req_data['amount']
-    resp_obj = {} 
-    stock_info = [] 
 
-    options = []
-    while len(options) < 3:
-        temp = random.randint(0,4)
-        if temp not in options:
-            options.append(temp)
-
-    #print options
-    i = 0
-    for option in options:
-        stock_list1 = stock_options[strategy_1]
-        if i == 0:
-            perc = 0.36
-            i=i+1
-        elif i == 1:
-            perc = 0.24
-            i=i+1
-        elif i == 2:
-            perc = 0.4
-
-        temp = {}
-        try:
-            resp_iex = requests.get('https://api.iextrading.com/1.0/stock/'+stock_list1[option]+'/quote')
-            resp_aplha = requests.get('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+stock_list1[option]+'&outputsize=compact&apikey=8P5LW0AO6BRTVL3Y')
-            if resp_iex.status_code == 200:
-                r = resp_iex.json()
-                r2 = resp_aplha.json()
-                #print r['companyName']
-                temp["symbolName"] = r['symbol']
-                temp['companyName'] = r['companyName']
-                temp['latestPrice'] = r['latestPrice']
-                temp['changePercentage'] = float(r['changePercent'])*100
-                #print perc
-                temp['investAmount'] = amount*(perc)
-                temp['weeklyData'] = r2['Time Series (Daily)']
-                #print "**************END****************"
-                stock_info.append(temp)
-        except:
-            print("some error")
-            return "failed",500
-
-    resp_obj['stock_info'] = stock_info
-    return jsonify(resp_obj)
+@app.route('/')
+def hello_world():
+    """
+    Serves the main template file.
+    You probably do NOT want to modify this.
+    """
+    return render_template('home.html')
 
 
+@app.after_request
+def add_header(r):
+    """
+    Disable all caching.
+    You probably do NOT want to modify this.
+    """
+    r.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    r.headers["Pragma"] = "no-cache"
+    r.headers["Expires"] = "0"
+    r.headers['Cache-Control'] = 'public, max-age=0'
+    return r
 
-@app.route('/suggest2',methods=['POST'])
 
-def suggest_stocks2():
-    print ("suggest2")
-    req_data = request.get_json()
-    strategy_1 = req_data['strategy_1']
-    strategy_2 = req_data['strategy_2']
-    amount = req_data['amount']
-    resp_obj = {}
-    stock_info = []
+#####################################
+# REST backend interface
 
-    options = []
-    while len(options) < 3:
-        temp = random.randint(0,4)
-        if temp not in options:
-            options.append(temp)
+"""
+Returns an array of stock objects. 
+Each stock object has these attributes: P/E Ratio (decimal), amount_to_spend (decimal), currentPrice (decimal), 
+and history (array of the last 7 days of prices. Will usually be length of 5 because stock market is closed on weekends)
 
-    #print options
-    i = 0
-    for option in options:
-        stock_list1 = stock_options[strategy_1]
-        stock_list2 = stock_options[strategy_2]
-        if i == 0:
-            perc = 0.12
-            i=i+1
-        elif i == 1:
-            perc = 0.18
-            i = i+1
-        elif i==2:
-            perc = 0.4
-            i = i+1
+Paramters for Post Request:
+"amount":  the numerical value for how much a user is willing to invest
+"strategies: an array of up two strategies (case insensitive). Must be from the following: Ethical, Growth, Index, Quality, Value
 
-        
-        try:
-            temp = {}
-            resp_iex = requests.get('https://api.iextrading.com/1.0/stock/'+stock_list1[option]+'/quote')
-            resp_aplha = requests.get('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+stock_list1[option]+'&outputsize=compact&apikey=8P5LW0AO6BRTVL3Y')
-            
-            if resp_iex.status_code == 200:
-                r = resp_iex.json()
-                r2 = resp_aplha.json()
-                #print r['companyName']
-                temp["symbolName"] = r['symbol']
-                temp['companyName'] = r['companyName']
-                temp['latestPrice'] = r['latestPrice']
-                temp['changePercentage'] = float(r['changePercent'])*100
-                #print perc
-                temp['investAmount'] = amount*(perc)
-                temp['weeklyData'] = r2['Time Series (Daily)']
-                #print "**************END****************"
-                stock_info.append(temp)
-            if i<3:
-                temp = {}
-                resp_iex = requests.get('https://api.iextrading.com/1.0/stock/'+stock_list2[option]+'/quote')
-                resp_aplha = requests.get('https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol='+stock_list2[option]+'&outputsize=compact&apikey=8P5LW0AO6BRTVL3Y')
-                if resp_iex.status_code == 200:
-                    r = resp_iex.json()
-                    r2 = resp_aplha.json()
-                    #print r['companyName']
-                    temp["symbolName"] = r['symbol']
-                    temp['companyName'] = r['companyName']
-                    temp['latestPrice'] = r['latestPrice']
-                    temp['changePercentage'] = float(r['changePercent'])*100
-                    #print perc
-                    temp['investAmount'] = amount*(perc)
-                    temp['weeklyData'] = r2['Time Series (Daily)']
-                    #print "**************END****************"
-                    stock_info.append(temp)
-                    #print len(stock_info)
-        except:
-            print("some error")
-            return "failed",500
+Example Request Body:
+{
+    "amount": 5000,
+    "strategies": ["Growth", "Quality"]
+}
 
-    resp_obj['stock_info'] = stock_info
-    return jsonify(resp_obj)
+Example Response Body:
+{
+    "CVS": {
+        "P/E_Ratio": 16.220982,
+        "amount_to_spend": 903.42,
+        "currentPrice": 92.93,
+        "history": [  89.05999755859375,  88.77999877929688,  89.98999786376953,  90.87000274658203,  92.6500015258789 ]
+    },
+    "ED": {
+        "P/E_Ratio": 24.158768,
+        "amount_to_spend": 856.16,
+        "currentPrice": 81.56,
+        "history": [   77.63999938964844,   77.94000244140625,   78.69000244140625,   80.52999877929688,   81.3499984741211]
+    },
+    "FB": {
+        "P/E_Ratio": 23.100758,
+        "amount_to_spend": 862.46,
+        "currentPrice": 322.81,
+        "history": [324.4599914550781,  310.6000061035156,  310.3900146484375,  306.8399963378906,  317.8699951171875 ]
+    },
+    "GOOG": {
+        "P/E_Ratio": 28.522036,
+        "amount_to_spend": 830.18,
+        "currentPrice": 2960.73,
+        "history": [  2849.0400390625,  2832.360107421875,  2875.530029296875,  2850.409912109375,  2875.929931640625]
+    },
+    "MDLZ": {
+        "P/E_Ratio": 19.551098,
+        "amount_to_spend": 883.6,
+        "currentPrice": 61.41,
+        "history": [58.939998626708984,58.560001373291016, 59.459999084472656,      60.2599983215332,      61.41999816894531  ]
+    },
+    "NFLX": {
+        "P/E_Ratio": 56.404297,
+        "amount_to_spend": 664.18,
+        "currentPrice": 625.58,
+        "history": [  641.9000244140625,  617.77001953125,  616.469970703125, 602.1300048828125, 612.6900024414062 ]
+    }
+}
+
+"""
+
+
+@app.route('/stocks', methods=['POST'])
+def allocate_stocks():
+    print(request)
+    amount = request.json["amount"]
+    # amount = request.form.get("amount")
+    # amount = int(amount)
+
+    strategies = request.json["strategies"]
+    #strategies = request.form.getlist("strategies")
+    # strategies = (strategies)
+    print(amount)
+    print(strategies)
+    print(len(strategies))
+    valid_strategies = ["ETHICAL", "GROWTH", "INDEX", "QUALITY", "VALUE"]
+
+    if amount <= 0:
+        return "Amount must be greater than 0", 400
+    if len(strategies) == 0 or len(strategies) > 2:
+        return "Strategies array must be of either size 1 or size 2", 400
+    else:
+        for strategy in strategies:
+            if strategy.upper() not in valid_strategies:
+                return "Strategies must be from the following: Ethical, Growth, Index, Quality, Value.", 400
+
+    current = dt.now()
+    year = current.year
+    month = current.month
+    day = current.day
+    print(year, month, day)
+    stocks = {}
+    totalPE = 0
+    for strategy in strategies:
+        for stock in investment_strategies[strategy.upper()]:
+            print(stock)
+            data = yf.download(stock,
+                               f'{year}-{month if day - 7 > 0 else month - 1}-{day - 7 if day - 7 > 0 else 30 - (day - 7)}',
+                               f'{year}-{month}-{day}')
+            info = yf.Ticker(stock).info
+            stocks[stock] = {"currentPrice": info["regularMarketPrice"], "P/E_Ratio": info["trailingPE"],
+                             "history": data["Close"].to_list()}
+            totalPE += info["trailingPE"]
+
+    # how much money to allocate to each stock
+    for current_stock in stocks:
+        amount_to_spend = round(((1 - (stocks[current_stock]["P/E_Ratio"] / totalPE)) / (len(stocks) - 1)) * amount, 2)
+        print(current_stock, totalPE, stocks[current_stock]["P/E_Ratio"], amount, amount_to_spend)
+        print(current_stock)
+        stocks[current_stock]["amount_to_spend"] = amount_to_spend
+    return json.dumps(stocks)
+
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0')
+    app.run(debug=True)
+
