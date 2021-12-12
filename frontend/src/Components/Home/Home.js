@@ -108,7 +108,7 @@ class Home extends Component {
         var msg = null
 
         if(this.state.msg){
-            msg = "Investment amount should be greater than $1000"
+            msg = "Investment amount should be greater than $5000"
         }
 
         if (this.state.ethical)
@@ -132,108 +132,90 @@ class Home extends Component {
         else
             qualityButton = <center><Button id="quality" onClick={this.toggleStrategy} block>Select</Button></center>
         return (
-            <div class="bg-light">
+            <div class="bg">
                 <div class="px-3 pt-3">
                     <center>
-                        <Link to="/"><h1 class="text-info">Stock Portfolio Suggestion Engine</h1></Link>
+                        <Link to="/"><h1 class="text-info-overlap">STOCK PORTFOLIO SUGGESTION ENGINE</h1></Link>
                     </center>
                     <Divider></Divider>
                 </div>
-                <div class="px-2 py-2">
-                    <h3 class="px-2">Step 1</h3>
-                    <h4 class="text-secondary px-2">Enter the Amount(in dollars) you want to Invest:</h4>
+                <div class="px-2 py-2" align="center">
+                    <h4 class="text-secondary1">Enter the Amount(in dollars) you want to Invest:</h4>
                     <InputNumber
                         step={100}
-                        style={{ width: '100%', height: 45 }}
+                        style={{ width: '40%', height: 35 }}
                         onChange={this.changeAmount}
                     ></InputNumber>
                     <p class="text-danger">{msg}</p>
                 </div>
-                <div class="px-2 py-2">
-                    <h3 class="px-2">Step 2</h3>
-                    <h4 class="px-2 text-secondary">Select upto two Investment Strategies</h4>
+                <div class="px-2 py-2" align="center">
+                    <h4 class="text-secondary1" >Select upto two Investment Strategies :</h4>
                     <Row type="flex">
-                        <Col span={6}>
+                        <Col span={2}></Col>
+                        <Col span={4}>
                             <div class="px-2 py-2">
                                 <Card
                                     bordered={true}
                                     title="Ethical Investing"
-                                    style={{ width: 300 }}
+                                    style={{ width: 200 }}
                                 >
-                                    <p>
-                                        Ethical investing, is any investment strategy which seeks to consider both financial return and social good to bring about a positive change.
-                                        Recently, it has also become known as "sustainable investing" or "responsible investing".
-                                </p>
                                     {ethicalButton}
                                 </Card>
                             </div>
                         </Col>
-                        <Col span={6}>
+                        <Col span={4}>
                             <div class="px-2 py-2">
                                 <Card
                                     bordered={true}
                                     title="Growth Investing"
-                                    style={{ width: 300 }}
+                                    style={{ width: 200 }}
                                 >
-                                    <p>
-                                        Growth investing is a style of investment strategy focused on capital appreciation.
-                                        Those who follow this style, known as growth investors, invest in companies that exhibit signs of above-average growth.
-                                </p>
                                     {growthButton}
                                 </Card>
                             </div>
                         </Col>
-                        <Col span={6}>
+                        <Col span={4}>
                             <div class="px-2 py-2">
                                 <Card
                                     bordered={true}
                                     title="Index Investing"
-                                    style={{ width: 300 }}
+                                    style={{ width: 200 }}
                                 >
-                                    <p>
-                                        Index investing is a passive strategy that attempts to generate similar returns as a broad market index. Investors use index investing to replicate the performance of a specific index – generally an equity or fixed-income index.
-                                </p>
                                     {indexButton}
                                 </Card>
                             </div>
                         </Col>
-                        <Col span={6}>
+                        <Col span={4}>
                             <div class="px-2 py-2">
                                 <Card
                                     bordered={true}
                                     title="Quality Investing"
-                                    style={{ width: 300 }}
+                                    style={{ width: 200 }}
                                 >
-                                    <p>
-                                        Quality investing strategy is based on a set of clearly defined fundamental criteria that seeks to identify companies with outstanding quality characteristics.
-                                        It supports best overall rather than best-in-class approach.
-                                </p>
                                     {qualityButton}
                                 </Card>
                             </div>
                         </Col>
-                        <Col span={6}>
+                        <Col span={4}>
                             <div class="px-2 py-2">
                                 <Card
                                     bordered={true}
                                     title="Value Investing"
-                                    style={{ width: 300 }}
+                                    style={{ width: 200 }}
                                 >
-                                    <p>
-                                        Value investing is an investment tactic where stocks are selected which appear to trade for less than their intrinsic, or book, values. Value investors actively seek out the stocks they believe the market has undervalued.
-                                </p>
                                     {valueButton}
                                 </Card>
                             </div>
                         </Col>
+                        <Col span={2}></Col>
                     </Row>
                 </div>
                 <div class="px-2 py-2">
-                    <center>
+                    <center style={{paddingTop: 50}}>
                         <Button
                             type="primary"
                             style={{ width: 500, height: 50 }}
-                            disabled={this.state.strategies.length < 1 || this.state.strategies.length > 2 || this.state.amount < 1000}
+                            disabled={this.state.strategies.length < 1 || this.state.strategies.length > 2 || this.state.amount < 5000}
                             onClick={this.invest}
                         >Invest</Button>
                     </center>
