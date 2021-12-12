@@ -1,6 +1,4 @@
 import React, { Component } from 'react';
-import Tabs from 'react-bootstrap/Tabs';
-import Tab from 'react-bootstrap/Tab';
 import Graph from './Graph';
 import Table from 'react-bootstrap/Table'
 import { Skeleton, Empty, Button } from 'antd';
@@ -66,7 +64,7 @@ export class Stats extends Component {
             console.log(index + " " + companies[index].currentPrice)
         });
 
-        let tabs = null
+
         let skeleton = null
         let error = null
         if (companies.length === 0 || !companies) {
@@ -79,60 +77,39 @@ export class Stats extends Component {
             error = <Empty description="Couldn't fetch data, try again by refreshing after a minute!" />
             skeleton=null
         }
-        // if (companies.length > 0) {
-        //     let historyData = []
-        //     const currentDate = new Date();
-            
-        //         Object.keys(companies).map((index, key) => {
-        //             // let weeklyData = Object.keys(company.weeklyData)
-        //             let weeklyData = companies[index].history
-        //             let data = []
-                    
-        //             Object.keys(weeklyData).map((key) => {
-        //                 data.push({
-        //                     "day": currentDate.getDate() + 5 - key,
-        //                     "val": weeklyData[key]
-        //                 })
-        //             });
-        //         });
-                
-        // }
         return (
             <div className="stats">
-                <h4>Stocks Suggestion</h4><br />
-                
-                <Table striped bordered hover>
-                    <thead>
-                        <tr>
-                            <th>Symbol</th>
-                            <th>Stock Value</th>
-                            <th>P/E Ratio</th>
-                            <th>Invested Amount</th>
-                            <th>Trend (Last 5 days)</th>
-                        </tr>
-                    </thead>
-                    
-                    <tbody>
-                        {Object.keys(companies).map((index, details) => {
-
-                            return <tr key={index}>
-                                <td><b>{index}</b></td>
-                                <td>${companies[index].currentPrice}</td>
-                                <td>{companies[index].peRatio}</td>
-                                <td>${companies[index].amount_to_spend}</td>
-                                <td><Graph data={companies[index].history}></Graph></td>
+                <center><h1>Stocks Suggestion</h1></center><br />
+                <div>
+                    <Table striped bordered hover className='table-font'>
+                        <thead className='bg'>
+                            <tr className='text-secondary1'>
+                                <th>Symbol</th>
+                                <th>Stock Value</th>
+                                <th>P/E Ratio</th>
+                                <th>Amount to Invest</th>
+                                <th>Trend (Last 5 days)</th>
                             </tr>
-                        })
-                        }
-                    </tbody>
-                </Table>
-                {error}
-                {skeleton}
-                {/* <br></br>
-                <h4>Stock Report</h4><br />
-                {tabs}
-                {skeleton}
-                {error} */}
+                        </thead>
+                        
+                        <tbody>
+                            {Object.keys(companies).map((index, details) => {
+
+                                return <tr key={index}>
+                                    <td><b>{index}</b></td>
+                                    <td>${companies[index].currentPrice}</td>
+                                    <td>{companies[index].peRatio}</td>
+                                    <td>${companies[index].amount_to_spend}</td>
+                                    <td><Graph data={companies[index].history}></Graph></td>
+                                </tr>
+                            })
+                            }
+                        </tbody>
+                    </Table>
+                    {error}
+                    {skeleton}
+                </div>
+                <Button size="large" onClick={() =>  {window.location.assign("/")}} className="mx-3 my-3 px-3 center">Back</Button>
                 <Button size="large" onClick={() =>  window.print()} className="mx-3 my-3 px-3 center">Print Data</Button>
             </div>
         )

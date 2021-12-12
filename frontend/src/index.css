@@ -15,10 +15,12 @@ code {
 .stats {
   height: 100vh;
   padding: 25px;
+  width: 75%;
+  margin: auto;
 }
 
 /* profileview */
 .profileview {
   width: 100%;
-  padding: 25px;
+  padding: 25px 0 0 0;
 }

@@ -116,7 +116,7 @@ def allocate_stocks():
     print(len(strategies))
     valid_strategies = ["ETHICAL", "GROWTH", "INDEX", "QUALITY", "VALUE"]
 
-    if amount <= 0:
+    if amount <= 4999:
         return "Amount must be greater than 0", 400
     if len(strategies) == 0 or len(strategies) > 2:
         return "Strategies array must be of either size 1 or size 2", 400

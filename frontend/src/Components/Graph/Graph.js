@@ -11,18 +11,38 @@ export class Graph extends Component {
     }
 
   }
+
+
+   addDays = (date, days) => {
+    
+    let newdate = new Date(date);
+
+    newdate.setDate(newdate.getDate() + days);
+    
+    var dd = newdate.getDate();
+    var mm = newdate.getMonth() + 1;
+    var y = newdate.getFullYear();
+
+    var someFormattedDate = mm + '/' + dd + '/' + y;
+    return someFormattedDate
+}
   render() {
 
     //const data = this.props.data.slice(50,100);
     console.log("history: " + this.state.historyData);
-    const currentDate = new Date(Date.now());
-            
+    const currentDate = new Date();
+    console.log(currentDate.toLocaleDateString());
+    let strokeColor = this.state.historyData[3] <= this.state.historyData[4] ? "#008000" : "#D22B2B"
     
                     let data = []
-                    const low = Math.min(...this.state.historyData);
+                    const low = Math.floor(Math.min(...this.state.historyData))-10;
+                    const high = Math.ceil(Math.max(...this.state.historyData))+10;
+
                     Object.keys(this.state.historyData).map((key) => {
+                      let date = this.addDays(currentDate, key - 5);
+                      console.log("date" + key + ": " + date);
                         data.push({
-                            "day": currentDate.getDate() - 5 + key,
+                            "day": date,
                             "val": this.state.historyData[key],
                             "low": this.state.low
                         })
@@ -32,12 +52,12 @@ export class Graph extends Component {
                
 
     return (
-      <div className="profileview mb-3">Stock Price
-        <LineChart width={1100} height={300} data={data} >
-          <Line type="monotone" dataKey="val" stroke="#8884d8"/>
-          {/* <CartesianGrid stroke="#ccc" /> */}
+      <div className="profileview mb-3">
+        <LineChart className="stock-trend-wrapper" width={700} height={300} data={data} >
+          <Line type="monotone" dataKey="val" stroke={strokeColor}/>
+          <CartesianGrid strokeDasharray="5 5" />
           <XAxis dataKey="day" />
-          <YAxis dataKey="val" />
+          <YAxis dataKey="val"  domain={[low, high]}/>
           <Tooltip />
         </LineChart>
       </div>

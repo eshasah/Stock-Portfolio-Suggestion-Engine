@@ -26,10 +26,10 @@ class Home extends Component {
     }
 
     changeAmount = (e) => {
-        if(e<1000){
+        if(e<5000){
             this.setState({
                 amount:e,
-                msg:"Below 1000"
+                msg:"Below 5000"
             })
         }else{
             this.setState({
@@ -132,15 +132,15 @@ class Home extends Component {
         else
             qualityButton = <center><Button id="quality" onClick={this.toggleStrategy} block>Select</Button></center>
         return (
-            <div class="bg">
-                <div class="px-3 pt-3">
+            <div>
+                <div class="px-3 pt-3 bg">
                     <center>
-                        <Link to="/"><h1 class="text-info-overlap">STOCK PORTFOLIO SUGGESTION ENGINE</h1></Link>
+                        <h1 class="text-info-overlap">STOCK PORTFOLIO SUGGESTION ENGINE</h1>
                     </center>
                     <Divider></Divider>
                 </div>
                 <div class="px-2 py-2" align="center">
-                    <h4 class="text-secondary1">Enter the Amount(in dollars) you want to Invest:</h4>
+                    <h4 class="">What amount do you want to Invest (in dollars)?</h4>
                     <InputNumber
                         step={100}
                         style={{ width: '40%', height: 35 }}
@@ -149,7 +149,7 @@ class Home extends Component {
                     <p class="text-danger">{msg}</p>
                 </div>
                 <div class="px-2 py-2" align="center">
-                    <h4 class="text-secondary1" >Select upto two Investment Strategies :</h4>
+                    <h4 class="" >Select Investment Strategies (upto two):</h4>
                     <Row type="flex">
                         <Col span={2}></Col>
                         <Col span={4}>
@@ -215,9 +215,9 @@ class Home extends Component {
                         <Button
                             type="primary"
                             style={{ width: 500, height: 50 }}
-                            //disabled={this.state.strategies.length < 1 || this.state.strategies.length > 2 || this.state.amount < 5000}
+                            disabled={this.state.strategies.length < 1 || this.state.strategies.length > 2 || this.state.amount < 5000}
                             onClick={this.invest}
-                        >Invest</Button>
+                        >Submit</Button>
                     </center>
                 </div>
             </div>
