@@ -15,7 +15,7 @@ export class Graph extends Component {
 
     //const data = this.props.data.slice(50,100);
     console.log("history: " + this.state.historyData);
-    const currentDate = new Date();
+    const currentDate = new Date(Date.now());
             
     
                     let data = []
@@ -34,8 +34,8 @@ export class Graph extends Component {
     return (
       <div className="profileview mb-3">Stock Price
         <LineChart width={1100} height={300} data={data} >
-          <Line type="monotone" dataKey="low" stroke="#000"/>
-          <CartesianGrid stroke="#ccc" />
+          <Line type="monotone" dataKey="val" stroke="#8884d8"/>
+          {/* <CartesianGrid stroke="#ccc" /> */}
           <XAxis dataKey="day" />
           <YAxis dataKey="val" />
           <Tooltip />
