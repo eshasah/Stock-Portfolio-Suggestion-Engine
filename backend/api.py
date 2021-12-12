@@ -139,14 +139,14 @@ def allocate_stocks():
                                f'{year}-{month if day - 7 > 0 else month - 1}-{day - 7 if day - 7 > 0 else 30 - (day - 7)}',
                                f'{year}-{month}-{day}')
             info = yf.Ticker(stock).info
-            stocks[stock] = {"currentPrice": info["regularMarketPrice"], "P/E_Ratio": info["trailingPE"],
+            stocks[stock] = {"currentPrice": info["regularMarketPrice"], "peRatio": info["trailingPE"],
                              "history": data["Close"].to_list()}
             totalPE += info["trailingPE"]
 
     # how much money to allocate to each stock
     for current_stock in stocks:
-        amount_to_spend = round(((1 - (stocks[current_stock]["P/E_Ratio"] / totalPE)) / (len(stocks) - 1)) * amount, 2)
-        print(current_stock, totalPE, stocks[current_stock]["P/E_Ratio"], amount, amount_to_spend)
+        amount_to_spend = round(((1 - (stocks[current_stock]["peRatio"] / totalPE)) / (len(stocks) - 1)) * amount, 2)
+        print(current_stock, totalPE, stocks[current_stock]["peRatio"], amount, amount_to_spend)
         print(current_stock)
         stocks[current_stock]["amount_to_spend"] = amount_to_spend
     return json.dumps(stocks)
