@@ -80,7 +80,8 @@ export class Stats extends Component {
         return (
             <div className="stats">
                 <center><h1>Stocks Suggestion</h1></center><br />
-                    <Table>
+                <div>
+                    <Table striped bordered hover className='table-font'>
                         <thead className='bg'>
                             <tr className='text-secondary1'>
                                 <th>Symbol</th>
@@ -107,6 +108,7 @@ export class Stats extends Component {
                     </Table>
                     {error}
                     {skeleton}
+                </div>
                 <Button size="large" onClick={() =>  {window.location.assign("/")}} className="mx-3 my-3 px-3 center">Back</Button>
             </div>
         )
