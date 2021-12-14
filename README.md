@@ -1,9 +1,9 @@
 # CMPE 285: Stock Portfolio Suggestion Engine
 ## Team members
-- Sunny Kohli
-- Esha Sah
-- Isha Rao
-- Nalini Mehendale
+- Sunny Kohli (011115260)
+- Esha Sah (015250534)
+- Isha Rao (015323113)
+- Nalini Mehendale (015312206)
 
 ## Youtube link
 - Access the Project presentation and demo video on this link: [CMPE 285 Stock Portfolio Final Project](https://www.youtube.com/watch?v=XsUBwQvu17A&ab_channel=SunnyKohli)
