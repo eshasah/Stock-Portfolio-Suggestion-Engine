@@ -103,7 +103,7 @@ Example Response Body:
 
 @app.route('/stocks', methods=['POST'])
 def allocate_stocks():
-    print(request)
+    # print(request)
     amount = request.json["amount"]
     # amount = request.form.get("amount")
     # amount = int(amount)
@@ -111,9 +111,9 @@ def allocate_stocks():
     strategies = request.json["strategies"]
     #strategies = request.form.getlist("strategies")
     # strategies = (strategies)
-    print(amount)
-    print(strategies)
-    print(len(strategies))
+    # print(amount)
+    # print(strategies)
+    # print(len(strategies))
     valid_strategies = ["ETHICAL", "GROWTH", "INDEX", "QUALITY", "VALUE"]
 
     if amount <= 4999:
@@ -129,12 +129,12 @@ def allocate_stocks():
     year = current.year
     month = current.month
     day = current.day
-    print(year, month, day)
+    # print(year, month, day)
     stocks = {}
     totalPE = 0
     for strategy in strategies:
         for stock in investment_strategies[strategy.upper()]:
-            print(stock)
+            # print(stock)
             data = yf.download(stock,
                                f'{year}-{month if day - 7 > 0 else month - 1}-{day - 7 if day - 7 > 0 else 30 - (day - 7)}',
                                f'{year}-{month}-{day}')
@@ -146,8 +146,8 @@ def allocate_stocks():
     # how much money to allocate to each stock
     for current_stock in stocks:
         amount_to_spend = round(((1 - (stocks[current_stock]["peRatio"] / totalPE)) / (len(stocks) - 1)) * amount, 2)
-        print(current_stock, totalPE, stocks[current_stock]["peRatio"], amount, amount_to_spend)
-        print(current_stock)
+        # print(current_stock, totalPE, stocks[current_stock]["peRatio"], amount, amount_to_spend)
+        # print(current_stock)
         stocks[current_stock]["amount_to_spend"] = amount_to_spend
     return json.dumps(stocks)
 

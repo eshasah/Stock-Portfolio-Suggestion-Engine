@@ -112,23 +112,23 @@ class Home extends Component {
         }
 
         if (this.state.ethical)
-            ethicalButton = <center><Button id="ethical" onClick={this.toggleStrategy} type="primary" block>Selected</Button></center>
+            ethicalButton = <center><Button id="ethical" onClick={this.toggleStrategy} type="primary" style={{color: "yellow"}} block>Selected</Button></center>
         else
             ethicalButton = <center><Button id="ethical" onClick={this.toggleStrategy} block>Select</Button></center>
         if (this.state.growth)
-            growthButton = <center><Button id="growth" onClick={this.toggleStrategy} type="primary" block>Selected</Button></center>
+            growthButton = <center><Button id="growth" onClick={this.toggleStrategy} type="primary" style={{color: "yellow"}} block>Selected</Button></center>
         else
             growthButton = <center><Button id="growth" onClick={this.toggleStrategy} block>Select</Button></center>
         if (this.state.index)
-            indexButton = <center><Button id="index" onClick={this.toggleStrategy} type="primary" block>Selected</Button></center>
+            indexButton = <center><Button id="index" onClick={this.toggleStrategy} type="primary" style={{color: "yellow"}} block>Selected</Button></center>
         else
             indexButton = <center><Button id="index" onClick={this.toggleStrategy} block>Select</Button></center>
         if (this.state.value)
-            valueButton = <center><Button id="value" onClick={this.toggleStrategy} type="primary" block>Selected</Button></center>
+            valueButton = <center><Button id="value" onClick={this.toggleStrategy} type="primary" style={{color: "yellow"}} block>Selected</Button></center>
         else
             valueButton = <center><Button id="value" onClick={this.toggleStrategy} block>Select</Button></center>
         if (this.state.quality)
-            qualityButton = <center><Button id="quality" onClick={this.toggleStrategy} type="primary" block>Selected</Button></center>
+            qualityButton = <center><Button id="quality" onClick={this.toggleStrategy} type="primary" style={{color: "yellow"}} block>Selected</Button></center>
         else
             qualityButton = <center><Button id="quality" onClick={this.toggleStrategy} block>Select</Button></center>
         return (
